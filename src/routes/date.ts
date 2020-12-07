@@ -12,16 +12,16 @@ router.get("/api/timestamp/:date", (req: Request, res: Response) => {
     res.send({ unix: UnixTime, utc: UTCTime });
   }
 
-  if (Object.prototype.toString.call(dateFromParams) === "[object Date]") {
-    // it is a date
-    if (isNaN(dateFromParams.getTime())) {
-      res.json({ error: "Invalid Date" });
-    } else {
-      return;
-    }
-  } else {
-    res.json({ error: "Invalid Date" });
-  }
+  // if (Object.prototype.toString.call(dateFromParams) === "[object Date]") {
+  //   // it is a date
+  //   if (isNaN(dateFromParams.getTime())) {
+  //     res.json({ error: "Invalid Date" });
+  //   } else {
+  //     return;
+  //   }
+  // } else {
+  //   res.json({ error: "Invalid Date" });
+  // }
 
   const date = new Date(dateFromParams);
   const UnixTime = date.getTime();
