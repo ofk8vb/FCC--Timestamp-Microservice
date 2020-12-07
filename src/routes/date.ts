@@ -2,15 +2,33 @@ import express, { Request, Response } from "express";
 
 const router = express.Router();
 
-router.get("/api/timestamp/:date", (req: Request, res: Response) => {
-  const dateFromParams = JSON.parse(req.params.date);
+// //@ts-ignore
+// Date.prototype.isValid = function(){
+//   return this.getTime() === this.getTime();
+// }
 
-  if (dateFromParams === "") {
-    const result = new Date();
-    const UnixTime = result.getTime();
-    const UTCTime = result.toUTCString();
-    res.send({ unix: UnixTime, utc: UTCTime });
-  }
+router.get("/api/timestamp/:date", (req: Request, res: Response) => {
+    let dateFromParams = req.params.date
+    console.log(dateFromParams)
+
+
+    let date = new Date(parseInt(dateFromParams));
+    let UTCTime = date.toUTCString();
+ 
+    if(/\d{5,}/.test(dateFromParams)){
+         res.json({ unix: JSON.parse(dateFromParams), utc: UTCTime });
+    }
+
+    let dateObject = new Date(dateFromParams);
+
+    if(dateObject.toString()==="Invalid Date"){
+      res.json({ error: "Invalid Date" });
+    }else{
+      res.json({ unix: dateObject.valueOf(), utc: dateObject.toUTCString() });
+    }
+  
+  console.log(dateFromParams)
+
 
   // if (Object.prototype.toString.call(dateFromParams) === "[object Date]") {
   //   // it is a date
@@ -23,10 +41,8 @@ router.get("/api/timestamp/:date", (req: Request, res: Response) => {
   //   res.json({ error: "Invalid Date" });
   // }
 
-  const date = new Date(dateFromParams);
-  const UnixTime = date.getTime();
-  const UTCTime = date.toUTCString();
-  res.json({ unix: UnixTime, utc: UTCTime });
+ 
+ 
 });
 
 export { router as DateRouter };
